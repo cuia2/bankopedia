@@ -45,17 +45,17 @@ export default function Homepage({ navigation }) {
         </Text>
         <View style = {styles.button3}>
             <View style = {styles.button_style}>
-                <Button  title={"Discover"} color="#005100" onPress={onPressHandler}/>
+                <Button  title={"Discover"} color="#005100" onPress={() => navigation.navigate("Discover_page")}/>
             </View>
             <View style = {styles.button_style}>
-                <Button  title={"News"} color="#005100" onPress={onPressHandler}/>
+                <Button  title={"News"} color="#005100" onPress={() => navigation.navigate("News_page")}/>
             </View>
             <View style = {styles.button_style}>
-                <Button  title={"Calendar"} color="#005100" onPress={onPressHandler}/>
+                <Button  title={"Calendar"} color="#005100" onPress={() => navigation.navigate("Calendar_page")}/>
             </View>
-            
-
-
+        </View>
+        <View>
+          <Button  title={"Account"} color="#005100" onPress={onPressHandler}/>
         </View>
       </View>
       
@@ -72,7 +72,7 @@ export default function Homepage({ navigation }) {
       alignItems: 'center',
       justifyContent: 'space-evenly',
     },
-  
+    
     input: {
     //   width: "100%",
     //   marginBottom: "10%",
@@ -83,14 +83,14 @@ export default function Homepage({ navigation }) {
         fontWeight: "bold",
     },
     button3: {
-      fontSize: 10,
-      flexDirection: "row",
-      position: "absolute",
-      alignItems: 'center',
-      justifyContent: 'center',
-      bottom: 30,
-      height: 30,
-      width: 200,
+        fontSize: 10,
+        flexDirection: "row",
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        bottom: 30,
+        height: 30,
+        width: 200,
     },
     button_style: {
         margin: 10,
