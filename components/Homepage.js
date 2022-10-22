@@ -238,6 +238,12 @@ export default function Homepage({ navigation }) {
                 <Button  title={"Calendar"} color="#005100" onPress={() => navigation.navigate("Calendar_page")}/>
             </View>
         </View>
+<<<<<<< HEAD
+=======
+        <View>
+          <Button  title={"Account"} color="#005100" onPress={() => navigation.navigate("Account_page")}/>
+        </View>
+>>>>>>> 6cc87391b17a4f68cd8e0d74afbbba53a035f4e3
       </View>
       <TouchableOpacity style = {{
           position: "absolute",
