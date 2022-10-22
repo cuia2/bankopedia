@@ -1,99 +1,97 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Keyboard,  TouchableWithoutFeedback, Text, Image } from 'react-native';
-import { TextInput, Button } from "@react-native-material/core";
-import { useLinkProps } from '@react-navigation/native';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 
-const HideKeyboard = ({ children }) => (
-  <React.Fragment>
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-  </React.Fragment>
-);
-
-
-export default function Account({ navigation }) {
-    const values = ["Bank Balance", "Credit Score"];
-    const account_info = [
-        'https://realtybiznews.com/wp-content/uploads/2018/11/Credit-Score-Meter.png',
-        'https://cdn.gobankingrates.com/wp-content/uploads/Mint-budget-spending1.png'
-
-    ];
-    const [counter, setCount] = useState(0);
-    const onPressHandler = () => {
-        if (counter == 0) setCount(counter + 1);
-        if (counter == 1) setCount(0);
-    }
-  return (
-    <React.Fragment>
-    <HideKeyboard>
-    <View style={styles.container}>
-        <Text style={styles.titleText}>{'HOMEPAGE'}</Text>
-        <Image
-            source = {{
-                width: 200,
-                height: 200,
-                uri: account_info[counter],
-            }}
-        />
-        <Button  title={values[counter]} color="#002100" onPress={onPressHandler}/>
-        <Text style={{marginTop: "7.5%"}}>Go Back to Login Page?<Text>{' '}</Text>
-          <Text style={{color: 'blue'}}
-                onPress={() => navigation.navigate("Login")}>
-          Go Back
-          </Text>
-        </Text>
-        <View style = {styles.button3}>
-            <View style = {styles.button_style}>
-                <Button  title={"Discover"} color="#005100" onPress={() => navigation.navigate("Discover_page")}/>
+export default class Account extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+          <View style={styles.header}></View>
+          <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar2.png'}}/>
+          <View style={styles.body}>
+            <View style={styles.bodyContent}>
+              <Text style={styles.name}>John Doe</Text>
+              <Text style={styles.info}>UX Designer / Mobile developer</Text>
+              <Text style={styles.description}>Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text>
+              
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text>Bookmarked Articles</Text>  
+              </TouchableOpacity>              
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text>Change Password</Text> 
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text>Settings</Text>  
+              </TouchableOpacity>    
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text>Delete Account</Text>  
+              </TouchableOpacity>    
             </View>
-            <View style = {styles.button_style}>
-                <Button  title={"News"} color="#005100" onPress={() => navigation.navigate("News_page")}/>
-            </View>
-            <View style = {styles.button_style}>
-                <Button  title={"Calendar"} color="#005100" onPress={() => navigation.navigate("Calendar_page")}/>
-            </View>
-        </View>
-        <View>
-          <Button  title={"Account"} color="#005100" onPress={onPressHandler}/>
         </View>
       </View>
-      
-    </HideKeyboard>
-    </React.Fragment>
-  );
+    );
+  }
 }
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
-    },
-    
-    input: {
-    //   width: "100%",
-    //   marginBottom: "10%",
-    //   marginTop: "40%",
-    },
-    titleText: {
-        fontSize: 40,
-        fontWeight: "bold",
-    },
-    button3: {
-        fontSize: 10,
-        flexDirection: "row",
-        position: "absolute",
-        justifyContent: "center",
-        alignItems: "center",
-        bottom: 30,
-        height: 30,
-        width: 200,
-    },
-    button_style: {
-        margin: 10,
-    }
-  });
-  
+const styles = StyleSheet.create({
+  header:{
+    backgroundColor: "#00BFFF",
+    height:200,
+  },
+  avatar: {
+    width: 130,
+    height: 130,
+    borderRadius: 63,
+    borderWidth: 4,
+    borderColor: "white",
+    marginBottom:10,
+    alignSelf:'center',
+    position: 'absolute',
+    marginTop:130
+  },
+  name:{
+    fontSize:22,
+    color:"#FFFFFF",
+    fontWeight:'600',
+  },
+  body:{
+    marginTop:40,
+  },
+  bodyContent: {
+    flex: 1,
+    alignItems: 'center',
+    padding:30,
+  },
+  name:{
+    fontSize:28,
+    color: "#696969",
+    fontWeight: "600"
+  },
+  info:{
+    fontSize:16,
+    color: "#00BFFF",
+    marginTop:10
+  },
+  description:{
+    fontSize:16,
+    color: "#696969",
+    marginTop:10,
+    textAlign: 'center'
+  },
+  buttonContainer: {
+    marginTop:10,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:250,
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
+  },
+});

@@ -1,99 +1,101 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Keyboard,  TouchableWithoutFeedback, Text, Image } from 'react-native';
-import { TextInput, Button } from "@react-native-material/core";
-import { useLinkProps } from '@react-navigation/native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View, Button, Platform } from 'react-native';
 
-const HideKeyboard = ({ children }) => (
-  <React.Fragment>
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-  </React.Fragment>
-);
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
+export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-export default function Calendar({ navigation }) {
-    const values = ["Bank Balance", "Credit Score"];
-    const account_info = [
-        'https://realtybiznews.com/wp-content/uploads/2018/11/Credit-Score-Meter.png',
-        'https://cdn.gobankingrates.com/wp-content/uploads/Mint-budget-spending1.png'
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-    ];
-    const [counter, setCount] = useState(0);
-    const onPressHandler = () => {
-        if (counter == 0) setCount(counter + 1);
-        if (counter == 1) setCount(0);
-    }
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
   return (
-    <React.Fragment>
-    <HideKeyboard>
-    <View style={styles.container}>
-        <Text style={styles.titleText}>{'HOMEPAGE'}</Text>
-        <Image
-            source = {{
-                width: 200,
-                height: 200,
-                uri: account_info[counter],
-            }}
-        />
-        <Button  title={values[counter]} color="#002100" onPress={onPressHandler}/>
-        <Text style={{marginTop: "7.5%"}}>Go Back to Login Page?<Text>{' '}</Text>
-          <Text style={{color: 'blue'}}
-                onPress={() => navigation.navigate("Login")}>
-          Go Back
-          </Text>
-        </Text>
-        <View style = {styles.button3}>
-            <View style = {styles.button_style}>
-                <Button  title={"Discover"} color="#005100" onPress={() => navigation.navigate("Discover_page")}/>
-            </View>
-            <View style = {styles.button_style}>
-                <Button  title={"News"} color="#005100" onPress={() => navigation.navigate("News_page")}/>
-            </View>
-            <View style = {styles.button_style}>
-                <Button  title={"Calendar"} color="#005100" onPress={() => navigation.navigate("Calendar_page")}/>
-            </View>
-        </View>
-        <View>
-          <Button  title={"Account"} color="#005100" onPress={onPressHandler}/>
-        </View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+      }}>
+      <Text>Your expo push token: {expoPushToken}</Text>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Title: {notification && notification.request.content.title} </Text>
+        <Text>Body: {notification && notification.request.content.body}</Text>
+        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
       </View>
-      
-    </HideKeyboard>
-    </React.Fragment>
+      <Button
+        title="Press to schedule a notification"
+        onPress={async () => {
+          await schedulePushNotification();
+        }}
+      />
+    </View>
   );
 }
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Bills are due! 💸💸💸",
+      body: 'Make sure to leave time for the post office!',
+      data: { data: 'goes here' },
     },
-    
-    input: {
-    //   width: "100%",
-    //   marginBottom: "10%",
-    //   marginTop: "40%",
-    },
-    titleText: {
-        fontSize: 40,
-        fontWeight: "bold",
-    },
-    button3: {
-        fontSize: 10,
-        flexDirection: "row",
-        position: "absolute",
-        justifyContent: "center",
-        alignItems: "center",
-        bottom: 30,
-        height: 30,
-        width: 200,
-    },
-    button_style: {
-        margin: 10,
-    }
+    trigger: { seconds: 2 },
   });
-  
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  return token;
+}
