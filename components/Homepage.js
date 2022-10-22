@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Keyboard,  TouchableWithoutFeedback, Text, Image } from 'react-native';
+import { View, StyleSheet, Keyboard,  TouchableWithoutFeedback, Text, Image, TouchableOpacity} from 'react-native';
 import { TextInput, Button } from "@react-native-material/core";
 import { useLinkProps } from '@react-navigation/native';
 
@@ -55,7 +55,13 @@ export default function Homepage({ navigation }) {
             </View>
         </View>
         <View>
-          <Button  title={"Account"} color="#005100" onPress={onPressHandler}/>
+          <TouchableOpacity style = {styles.account_style} onPress={() => navigation.navigate("Friends_page")}>
+            <Image source = {{
+              uri: "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-3/177800/130-512.png",
+              height: 50,
+              width: 50,
+              }}/> 
+          </TouchableOpacity> 
         </View>
       </View>
       
@@ -72,7 +78,13 @@ export default function Homepage({ navigation }) {
       alignItems: 'center',
       justifyContent: 'space-evenly',
     },
-    
+    account_style: {
+        position: "absolute",
+        top: "10%" ,
+        bottom: "10%",
+        display: "flex",
+
+    },
     input: {
     //   width: "100%",
     //   marginBottom: "10%",
