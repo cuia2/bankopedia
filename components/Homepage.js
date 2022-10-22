@@ -83,15 +83,14 @@ export default function Homepage({ navigation }) {
         fontWeight: "bold",
     },
     button3: {
-        fontSize: 10,
-        flexDirection: "row",
-        position: "absolute",
-        justifyContent: "space-between",
-        alignItems: "center",
-        bottom: 30,
-        height: 30,
-        width: 200,
-
+      fontSize: 10,
+      flexDirection: "row",
+      position: "absolute",
+      alignItems: 'center',
+      justifyContent: 'center',
+      bottom: 30,
+      height: 30,
+      width: 200,
     },
     button_style: {
         margin: 10,
