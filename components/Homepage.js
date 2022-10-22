@@ -55,7 +55,7 @@ export default function Homepage({ navigation }) {
             </View>
         </View>
         <View>
-          <Button  title={"Account"} color="#005100" onPress={onPressHandler}/>
+          <Button  title={"Account"} color="#005100" onPress={() => navigation.navigate("Account_page")}/>
         </View>
       </View>
       
