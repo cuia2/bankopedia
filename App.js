@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import React from 'react';
 import Login from './pages/Login';
-import Register from './pages/Register'
+import Homepage_page from './pages/Homepage_page';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -11,7 +11,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
-        <Stack.Screen options={{headerShown: false}} name="Register" component={Register} />
+        <Stack.Screen options={{headerShown: false}} name="Homepage_page" component={Homepage_page} />
       </Stack.Navigator>
     </NavigationContainer>
   );
